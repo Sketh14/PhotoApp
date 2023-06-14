@@ -69,8 +69,8 @@ namespace PhotoApp
                     if (device.isFrontFacing)
                         webCamDevice = device;
                 }
-                foreach (var resolution in webCamDevice.availableResolutions)
-                    Debug.Log($"Device available : {webCamDevice.name}, resolution : {resolution}");
+                //foreach (var resolution in webCamDevice.availableResolutions)
+                //    Debug.Log($"Device available : {webCamDevice.name}, resolution : {resolution}");
                 webCamTexture = new WebCamTexture(webCamDevice.name, 1280, 720);
                 //webCamTexture = new WebCamTexture(webCamDevice.name);
 

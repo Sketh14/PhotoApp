@@ -7,11 +7,12 @@ namespace PhotoApp
     public class Logic : MonoBehaviour
     {
         [SerializeField] private Transform[] photoTransforms;
-        [SerializeField] private GameObject photoPrefab;
+        [SerializeField] private GameObject photoPrefab, photoContainer;
 
         [Header("UI")]
         [SerializeField] private GameObject photoPreviewCanvas;
         [SerializeField] private UnityEngine.UI.Image shutterEffectPanel;
+        [SerializeField] private GameObject clickPhoto_Bt;
 
         [Header("Photo BG")]
         [SerializeField] private GameObject frameContainer;
@@ -31,8 +32,11 @@ namespace PhotoApp
         //On the Start Camera, under FrameCanvas
         public void StartCamera()
         {
-            localCameraCapture.StartCamera();
-            photoPreviewCanvas.SetActive(true);
+            if (photoCount < 12)
+            {
+                localCameraCapture.StartCamera();
+                photoPreviewCanvas.SetActive(true);
+            }
         }
 
         //On the Exit button, under the FrameCanvas
@@ -44,7 +48,7 @@ namespace PhotoApp
         #region Picture
         public void PictureTaken(ref Texture2D tex)
         {
-            tempPhoto = Instantiate(photoPrefab, spawnPos.position, Quaternion.identity);
+            tempPhoto = Instantiate(photoPrefab, spawnPos.position, Quaternion.identity, photoContainer.transform);
             tempPhoto.transform.eulerAngles = startRotation[Random.Range(0,2)];
             tempPhoto.transform.GetChild(0).GetComponent<MeshRenderer>().material.mainTexture = tex;
 
@@ -69,6 +73,7 @@ namespace PhotoApp
                         frameCanvas.SetActive(true);
                         frameContainer.SetActive(true);
                         localCameraCapture.StopCamera();
+                        photoContainer.SetActive(true);
                         Debug.Log($"Showed Effect");
 
                         _ = StartCoroutine(GetToPosition());
@@ -104,6 +109,9 @@ namespace PhotoApp
                     tempPhoto.transform.eulerAngles = photoTransforms[photoCount].eulerAngles;
 
                     photoTransforms[photoCount].gameObject.SetActive(false);
+
+                    if (photoCount < 11)
+                        clickPhoto_Bt.SetActive(true);
                     break;
                 }
 
